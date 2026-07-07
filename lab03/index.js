@@ -16,13 +16,15 @@ app.listen(port, () => {
 });
 
 app.post('/', async (req, res) => {
-  console.log('OK');
   try {
     const file = decodeBase64Json(req.body.message.data);
-    console.log(`file: ${JSON.stringify(file)}`);
+    await downloadFile(file.bucket, file.name);
+    const pdfFileName = await convertFile(file.name);
+    await uploadFile(process.env.PDF_BUCKET, pdfFileName);
+    await deleteFile(file.bucket, file.name);
   }
   catch (ex) {
-    console.log(ex);
+    console.log(`Error: ${ex}`);
   }
   res.set('Content-Type', 'text/plain');
   res.send('\n\nOK\n\n');
