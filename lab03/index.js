@@ -1,3 +1,8 @@
+const {promisify} = require('util');
+const {Storage}   = require('@google-cloud/storage');
+const exec        = promisify(require('child_process').exec);
+const storage     = new Storage();
+
 const express    = require('express');
 const app        = express();
 const bodyParser = require('body-parser');
