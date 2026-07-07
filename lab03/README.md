@@ -26,3 +26,24 @@ In the lab, you will learn how to build a web app based on Cloud Run, that autom
 * How to create a Dockerfile for a NodeJS application
 * Learn to deploy Cloud Run application
 * Trigger a Cloud Run server based on Cloud Storage
+
+
+## Notes
+
+```bash
+gcloud builds submit \
+  --tag gcr.io/$GOOGLE_CLOUD_PROJECT/pdf-converter
+
+gcloud run deploy pdf-converter \
+  --image gcr.io/$GOOGLE_CLOUD_PROJECT/pdf-converter \
+  --platform managed \
+  --region us-east4 \
+  --memory=2Gi \
+  --no-allow-unauthenticated \
+  --max-instances=1 \
+  --set-env-vars PDF_BUCKET=$GOOGLE_CLOUD_PROJECT-processed
+
+curl -X POST -H "Authorization: Bearer $(gcloud auth print-identity-token)" $SERVICE_URL
+
+bash copy_files.sh
+```
